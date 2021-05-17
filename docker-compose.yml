@@ -1,0 +1,22 @@
+version: '2.0'
+
+services:
+    mysql:
+        image: mysql:8
+        container_name: mysql_service
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: iqmsoft
+            MYSQL_ROOT_HOST: '%'  
+        volumes:
+            - ./MySQL:/docker-entrypoint-initdb.d
+    tomcat:
+        image: tomcat:9-jre10
+        container_name: tomcat_service
+        ports:
+            - 8080:8080
+        volumes:
+            - ./iqmsoft/target/iqmsoft.war:/usr/local/tomcat/webapps/iqmsoft.war
+        depends_on:
+            - mysql
